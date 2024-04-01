@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{717C8024-10BF-4840-9A8C-F0C6B1D993F1}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="..\Examples\BankingTests.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\UnitTests\DecumberUnitTests.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="BankingTests">
+        <MSBuild Projects="..\Examples\BankingTests.dproj"/>
+    </Target>
+    <Target Name="BankingTests:Clean">
+        <MSBuild Projects="..\Examples\BankingTests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BankingTests:Make">
+        <MSBuild Projects="..\Examples\BankingTests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DecumberUnitTests">
+        <MSBuild Projects="..\UnitTests\DecumberUnitTests.dproj"/>
+    </Target>
+    <Target Name="DecumberUnitTests:Clean">
+        <MSBuild Projects="..\UnitTests\DecumberUnitTests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DecumberUnitTests:Make">
+        <MSBuild Projects="..\UnitTests\DecumberUnitTests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="BankingTests;DecumberUnitTests"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="BankingTests:Clean;DecumberUnitTests:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="BankingTests:Make;DecumberUnitTests:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
