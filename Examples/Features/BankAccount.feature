@@ -6,4 +6,4 @@ Feature: Bank account
         And I pay a 50.80 electricity bill
         And I pay 15.99 for a cell phone bill
         And I pay 300 euros for rent
-        Then I have 633.22 euros left in my bank account
+        Then I have 633.21 euros left in my bank account

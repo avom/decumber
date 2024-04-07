@@ -22,6 +22,7 @@ type
     class destructor DestroyClass;
   public
     class procedure RunTest(const FeatureFileName: string);
+    class procedure RunTests(const Dir: string);
   end;
 
 implementation
@@ -89,13 +90,29 @@ begin
     TestRunner := TScenarioTestRunner.Create(StepDefinitions);
     Ast := ParseFile(FeatureFileName);
     Writeln(Ast.Token.Value);
-    const ScenarioAst = Ast.FirstChild(TGherkinTokenType.gttScenarioLine);
-    TestRunner.TestScenario(ScenarioAst);
+
+    const Scenarios = TList<TAstNode>.Create;
+    try
+      Ast.GetChildren(TGherkinTokenType.gttScenarioLine, Scenarios);
+      for var Scenario in Scenarios do
+      begin
+        Writeln;
+        TestRunner.TestScenario(Scenario);
+      end;
+    finally
+      Scenarios.Free;
+    end;
   finally
     StepDefinitions.Free;
     TestRunner.Free;
     Ast.Free;
   end;
+end;
+
+class procedure TDecumber.RunTests(const Dir: string);
+begin
+  const FeatureFiles = TDirectory.GetFiles(Dir, '*.feature');
+
 end;
 
 end.

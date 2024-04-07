@@ -48,13 +48,16 @@ begin
   try
     Eat(TGherkinTokenType.gttFeatureLine);
 
-    const Scenario = Result.AddChild(FCurrentToken);
-    Eat(TGherkinTokenType.gttScenarioLine);
+    while FCurrentToken.Type_ = TGherkinTokenType.gttScenarioLine do
+    begin
+      const Scenario = Result.AddChild(FCurrentToken);
+      Eat(TGherkinTokenType.gttScenarioLine);
 
-    repeat
-      Scenario.AddChild(FCurrentToken);
-      Eat(TGherkinTokenType.gttStepLine);
-    until FCurrentToken.Type_ <> TGherkinTokenType.gttStepLine;
+      repeat
+        Scenario.AddChild(FCurrentToken);
+        Eat(TGherkinTokenType.gttStepLine);
+      until FCurrentToken.Type_ <> TGherkinTokenType.gttStepLine;
+    end;
   except
     Result.Free;
     raise;
