@@ -24,6 +24,7 @@ type
 implementation
 
 uses
+  System.Generics.Collections,
   System.SysUtils,
   Decumber.Gherkin.Lexer,
   Decumber.Gherkin.Token;
@@ -45,13 +46,20 @@ begin
 
   FAst := FSut.Parse;
 
-  Assert.AreEqual(TGherkinTokenType.gttFeatureLine, FAst.Token.&Type, 'Feature line expected');
+  Assert.AreEqual(TGherkinTokenType.gttFeatureLine, FAst.Token.Type_, 'Feature line expected');
 
   const ScenarioAst = FAst.FirstChild(TGherkinTokenType.gttScenarioLine);
   Assert.IsNotNull(ScenarioAst, 'Scenario line expected');
-  Assert.IsNotNull(ScenarioAst.FirstChild(TGherkinTokenType.gttGivenLine), 'Given line expected');
-  Assert.IsNotNull(ScenarioAst.FirstChild(TGherkinTokenType.gttWhenLine), 'When line expected');
-  Assert.IsNotNull(ScenarioAst.FirstChild(TGherkinTokenType.gttThenLine), 'Then line expected');
+
+  const Steps = TList<TAstNode>.Create;
+  try
+    ScenarioAst.GetChildren(TGherkinTokenType.gttStepLine, Steps);
+    Assert.StartsWith('Given', Steps[0].Token.Value, 'Given line expected');
+    Assert.StartsWith('When', Steps[1].Token.Value, 'When line expected');
+    Assert.StartsWith('Then', Steps[2].Token.Value, 'Then line expected');
+  finally
+    Steps.Free;
+  end;
 end;
 
 procedure TGherkinParserTests.TearDown;

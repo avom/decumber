@@ -50,7 +50,7 @@ begin
   const i = Pos(' ', Step.Trim);
   if i > 0 then
     Result := Copy(Step.Trim, i + 1);
-  end;
+end;
 
 procedure TScenarioTestRunner.TestScenario(Ast: TAstNode);
 begin
@@ -62,9 +62,7 @@ begin
   Writeln(Ast.Token.Value);
   const Steps = TList<TAstNode>.Create;
   try
-    Ast.GetChildren(TGherkinTokenType.gttGivenLine, Steps);
-    Ast.GetChildren(TGherkinTokenType.gttWhenLine, Steps);
-    Ast.GetChildren(TGherkinTokenType.gttThenLine, Steps);
+    Ast.GetChildren(TGherkinTokenType.gttStepLine, Steps);
 
     for var Container in FStepDefinitions do
     begin

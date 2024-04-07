@@ -15,6 +15,8 @@ type
   GivenAttribute = class(StepAttribute);
   WhenAttribute = class(StepAttribute);
   ThenAttribute = class(StepAttribute);
+  AndAttribute = class(StepAttribute);
+  ButAttribute = class(StepAttribute);
 
 implementation
 

@@ -51,20 +51,20 @@ uses
 
 procedure TAstNodeTests.GetChildren_MultipleChildrenWithType_ReturnsOnlyChildrenWithType;
 begin
-  Fsut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttGivenLine, '', 2));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 3));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 4));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 5));
+  FSut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttUnknown, '', 3));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 3));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 4));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 5));
 
   const Children = TList<TAstNode>.Create;
   try
-    FSut.GetChildren(TGherkinTokenType.gttWhenLine, Children);
+    FSut.GetChildren(TGherkinTokenType.gttStepLine, Children);
 
     Assert.AreEqual(3, Children.Count, 'Wrong number of children returned');
     Assert.AreEqual(3, Children[0].Token.Pos, 'Wrong child found at 0');
-    Assert.AreEqual(4, Children[1].Token.Pos, 'Wrong child found at 0');
-    Assert.AreEqual(5, Children[2].Token.Pos, 'Wrong child found at 0');
+    Assert.AreEqual(4, Children[1].Token.Pos, 'Wrong child found at 1');
+    Assert.AreEqual(5, Children[2].Token.Pos, 'Wrong child found at 2');
   finally
     Children.Free;
   end;
@@ -72,17 +72,17 @@ end;
 
 procedure TAstNodeTests.GetChildren_NoChildrenWithType_ReturnsNoChildren;
 begin
-  Fsut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttGivenLine, '', 2));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 3));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 4));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 5));
+  FSut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttUnknown, '', 2));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 3));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 4));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 5));
 
   const Children = TList<TAstNode>.Create;
   try
-    FSut.GetChildren(TGherkinTokenType.gttThenLine, Children);
+    FSut.GetChildren(TGherkinTokenType.gttFeatureLine, Children);
 
-    Assert.IsNull(Children);
+    Assert.AreEqual(0, Children.Count);
   finally
     Children.Free;
   end;
@@ -90,13 +90,13 @@ end;
 
 procedure TAstNodeTests.GetChildren_NoChildren_ReturnsNoChildren;
 begin
-  Fsut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
+  FSut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
 
   const Children = TList<TAstNode>.Create;
   try
-    FSut.GetChildren(TGherkinTokenType.gttGivenLine, Children);
+    FSut.GetChildren(TGherkinTokenType.gttStepLine, Children);
 
-    Assert.IsNull(Children);
+    Assert.AreEqual(0, Children.Count);
   finally
     Children.Free;
   end;
@@ -104,19 +104,19 @@ end;
 
 procedure TAstNodeTests.GetChildren_NonEmptyResultList_ReturnsWithOriginalNodesInResultList;
 begin
-  Fsut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttGivenLine, '', 2));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 3));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 4));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 5));
+  FSut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttUnknown, '', 2));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 3));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 4));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 5));
 
   const Children = TList<TAstNode>.Create;
   try
-    FSut.GetChildren(TGherkinTokenType.gttGivenLine, Children);
-    FSut.GetChildren(TGherkinTokenType.gttWhenLine, Children);
+    FSut.GetChildren(TGherkinTokenType.gttUnknown, Children);
+    FSut.GetChildren(TGherkinTokenType.gttStepLine, Children);
 
     Assert.AreEqual(4, Children.Count, 'Wrong number of children returned');
-    Assert.AreEqual(0, Children[0].Token.Pos, 'Original AST node removed or moved');
+    Assert.AreEqual(2, Children[0].Token.Pos, 'Original AST node removed or moved');
   finally
     Children.Free;
   end;
@@ -125,13 +125,13 @@ end;
 
 procedure TAstNodeTests.FirstChild_MultipleChildrenWithType_ReturnsFirstAddedChild;
 begin
-  Fsut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttGivenLine, '', 2));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 3));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 4));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttWhenLine, '', 5));
+  Fsut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttFeatureLine, '', 1));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 2));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 3));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 4));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 5));
 
-  const Child = FSut.FirstChild(TGherkinTokenType.gttWhenLine);
+  const Child = FSut.FirstChild(TGherkinTokenType.gttStepLine);
 
   Assert.IsNotNull(Child, 'Child node not found');
   Assert.AreEqual(3, Child.Token.Pos, 'Wrong child node found');
@@ -140,9 +140,9 @@ end;
 procedure TAstNodeTests.FirstChild_NoChildrenWithType_ReturnsNil;
 begin
   Fsut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttGivenLine, '', 2));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 2));
 
-  const Child = FSut.FirstChild(TGherkinTokenType.gttWhenLine);
+  const Child = FSut.FirstChild(TGherkinTokenType.gttFeatureLine);
 
   Assert.IsNull(Child);
 end;
@@ -151,7 +151,7 @@ procedure TAstNodeTests.FirstChild_NoChildren_ReturnsNil;
 begin
   Fsut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
 
-  const Child = FSut.FirstChild(TGherkinTokenType.gttGivenLine);
+  const Child = FSut.FirstChild(TGherkinTokenType.gttStepLine);
 
   Assert.IsNull(Child);
 end;
@@ -159,9 +159,9 @@ end;
 procedure TAstNodeTests.FirstChild_SingleChildWithType_ReturnsChild;
 begin
   Fsut := TAstNode.Create(TGherkinToken.Create(TGherkinTokenType.gttScenarioLine, '', 1));
-  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttGivenLine, '', 2));
+  FSut.AddChild(TGherkinToken.Create(TGherkinTokenType.gttStepLine, '', 2));
 
-  const Child = FSut.FirstChild(TGherkinTokenType.gttGivenLine);
+  const Child = FSut.FirstChild(TGherkinTokenType.gttStepLine);
 
   Assert.IsNotNull(Child);
 end;

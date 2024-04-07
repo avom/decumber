@@ -10,7 +10,10 @@ type
   GivenAttribute = Decumber.StepDefinitions.Attributes.GivenAttribute;
   WhenAttribute = Decumber.StepDefinitions.Attributes.WhenAttribute;
   ThenAttribute = Decumber.StepDefinitions.Attributes.ThenAttribute;
-  Then_Attribute = Decumber.StepDefinitions.Attributes.ThenAttribute;
+  Then_Attribute = ThenAttribute;
+  AndAttribute = Decumber.StepDefinitions.Attributes.AndAttribute;
+  And_Attribute = AndAttribute;
+  ButAttribute = Decumber.StepDefinitions.Attributes.ButAttribute;
 
   TDecumber = class sealed
   private

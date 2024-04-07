@@ -6,10 +6,8 @@ type
   TGherkinTokenType = (
     gttEof,
     gttFeatureLine,
-    gttGivenLine,
     gttScenarioLine,
-    gttThenLine,
-    gttWhenLine,
+    gttStepLine,
     gttUnknown);
 
   TGherkinToken = record

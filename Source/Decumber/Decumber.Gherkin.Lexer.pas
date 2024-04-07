@@ -50,9 +50,12 @@ begin
   FKeywordTokens := TDictionary<string, TGherkinTokenType>.Create;
   FKeywordTokens.Add('Feature:', TGherkinTokenType.gttFeatureLine);
   FKeywordTokens.Add('Scenario:', TGherkinTokenType.gttScenarioLine);
-  FKeywordTokens.Add('Given', TGherkinTokenType.gttGivenLine);
-  FKeywordTokens.Add('When', TGherkinTokenType.gttWhenLine);
-  FKeywordTokens.Add('Then', TGherkinTokenType.gttThenLine);
+  FKeywordTokens.Add('Given', TGherkinTokenType.gttStepLine);
+  FKeywordTokens.Add('When', TGherkinTokenType.gttStepLine);
+  FKeywordTokens.Add('Then', TGherkinTokenType.gttStepLine);
+  FKeywordTokens.Add('And', TGherkinTokenType.gttStepLine);
+  FKeywordTokens.Add('But', TGherkinTokenType.gttStepLine);
+  FKeywordTokens.Add('*', TGherkinTokenType.gttStepLine);
 end;
 
 function TGherkinLexer.CurrentChar: Char;

@@ -25,13 +25,13 @@ type
     procedure Next_ScenarioLine;
 
     [Test]
-    procedure Next_Given;
-
-    [Test]
-    procedure Next_When;
-
-    [Test]
-    procedure Next_Then;
+    [TestCase('Given', 'Given')]
+    [TestCase('When', 'When')]
+    [TestCase('Then', 'Then')]
+    [TestCase('And', 'And')]
+    [TestCase('But', 'But')]
+    [TestCase('Asterisk', '*')]
+    procedure Next_Step(const Keyword: string);
 
     [Test]
     procedure Next_LineWithIndent_ReturnTokenWithoutIndent;
@@ -51,7 +51,7 @@ begin
 
   const Token = FSut.Next;
 
-  Assert.AreEqual(TGherkinTokenType.gttScenarioLine, Token.&Type);
+  Assert.AreEqual(TGherkinTokenType.gttScenarioLine, Token.Type_);
 end;
 
 procedure TGherkinLexerTests.Next_EmptySource_ReturnsEofToken;
@@ -60,7 +60,7 @@ begin
 
   const Token = FSut.Next;
 
-  Assert.AreEqual(TGherkinTokenType.gttEof, Token.&Type, 'Wrong type');
+  Assert.AreEqual(TGherkinTokenType.gttEof, Token.Type_, 'Wrong type');
   Assert.AreEqual('', Token.Value, 'Wrong token value');
   Assert.AreEqual(1, Token.Pos, 'Wrong line number');
 end;
@@ -71,18 +71,8 @@ begin
 
   const Token = FSut.Next;
 
-  Assert.AreEqual(TGherkinTokenType.gttFeatureLine, Token.&Type, 'Wrong token type');
+  Assert.AreEqual(TGherkinTokenType.gttFeatureLine, Token.Type_, 'Wrong token type');
   Assert.AreEqual('Feature: Lorem ipsum', Token.Value, 'Wrong token value');
-end;
-
-procedure TGherkinLexerTests.Next_Given;
-begin
-  FSut := TGherkinLexer.Create('Given lorem ipsum');
-
-  const Token = FSut.Next;
-
-  Assert.AreEqual(TGherkinTokenType.gttGivenLine, Token.&Type, 'Wrong token type');
-  Assert.AreEqual('Given lorem ipsum', Token.Value, 'Wrong token value');
 end;
 
 procedure TGherkinLexerTests.Next_ScenarioLine;
@@ -91,8 +81,18 @@ begin
 
   const Token = FSut.Next;
 
-  Assert.AreEqual(TGherkinTokenType.gttScenarioLine, Token.&Type, 'Wrong token type');
+  Assert.AreEqual(TGherkinTokenType.gttScenarioLine, Token.Type_, 'Wrong token type');
   Assert.AreEqual('Scenario: Lorem ipsum', Token.Value, 'Wrong token value');
+end;
+
+procedure TGherkinLexerTests.Next_Step(const Keyword: string);
+begin
+  FSut := TGherkinLexer.Create(Keyword + ' lorem ipsum');
+
+  const Token = FSut.Next;
+
+  Assert.AreEqual(TGherkinTokenType.gttStepLine, Token.Type_, 'Wrong token type');
+  Assert.AreEqual(Keyword + ' lorem ipsum', Token.Value, 'Wrong token value');
 end;
 
 procedure TGherkinLexerTests.Next_LineWithIndent_ReturnTokenWithoutIndent;
@@ -101,28 +101,8 @@ begin
 
   const Token = FSut.Next;
 
-  Assert.AreEqual(TGherkinTokenType.gttScenarioLine, Token.&Type, 'Wrong token type');
+  Assert.AreEqual(TGherkinTokenType.gttScenarioLine, Token.Type_, 'Wrong token type');
   Assert.AreEqual('Scenario: Lorem ipsum', Token.Value, 'Wrong token value');
-end;
-
-procedure TGherkinLexerTests.Next_Then;
-begin
-  FSut := TGherkinLexer.Create('Then lorem ipsum');
-
-  const Token = FSut.Next;
-
-  Assert.AreEqual(TGherkinTokenType.gttThenLine, Token.&Type, 'Wrong token type');
-  Assert.AreEqual('Then lorem ipsum', Token.Value, 'Wrong token value');
-end;
-
-procedure TGherkinLexerTests.Next_When;
-begin
-  FSut := TGherkinLexer.Create('When lorem ipsum');
-
-  const Token = FSut.Next;
-
-  Assert.AreEqual(TGherkinTokenType.gttWhenLine, Token.&Type, 'Wrong token type');
-  Assert.AreEqual('When lorem ipsum', Token.Value, 'Wrong token value');
 end;
 
 procedure TGherkinLexerTests.TearDown;

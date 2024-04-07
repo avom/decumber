@@ -51,14 +51,10 @@ begin
     const Scenario = Result.AddChild(FCurrentToken);
     Eat(TGherkinTokenType.gttScenarioLine);
 
-    Scenario.AddChild(FCurrentToken);
-    Eat(TGherkinTokenType.gttGivenLine);
-
-    Scenario.AddChild(FCurrentToken);
-    Eat(TGherkinTokenType.gttWhenLine);
-
-    Scenario.AddChild(FCurrentToken);
-    Eat(TGherkinTokenType.gttThenLine);
+    repeat
+      Scenario.AddChild(FCurrentToken);
+      Eat(TGherkinTokenType.gttStepLine);
+    until FCurrentToken.Type_ <> TGherkinTokenType.gttStepLine;
   except
     Result.Free;
     raise;
