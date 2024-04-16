@@ -185,6 +185,13 @@
         <DCCReference Include="Source\Banking.Transaction.pas"/>
         <DCCReference Include="Source\Banking.Money.pas"/>
         <DCCReference Include="Steps\BankingTests.BankAccountStepDefinitions.pas"/>
+        <DCCReference Include="Source\Banking.MonthlyLoanPaymentCalculator.pas"/>
+        <DCCReference Include="Source\Banking.LoanDecisionService.pas"/>
+        <DCCReference Include="Source\Banking.LoanApplicaton.pas"/>
+        <DCCReference Include="Source\Utils.DateTimeProvider.pas"/>
+        <DCCReference Include="Source\Banking.InterestRateProvider.pas"/>
+        <DCCReference Include="Steps\BankingTests.LoanDecisionServiceStepDefinitions.pas"/>
+        <DCCReference Include="Helpers\Helpers.DateTimeProvider.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -4,7 +4,9 @@ interface
 
 uses
   System.Rtti,
-  Decumber.StepDefinitions.Attributes;
+  System.Generics.Collections,
+  Decumber.StepDefinitions.Attributes,
+  Decumber.StepDefinitions.Container;
 
 type
   GivenAttribute = Decumber.StepDefinitions.Attributes.GivenAttribute;
@@ -20,22 +22,24 @@ type
     class var FRttiContext: TRttiContext;
     class constructor CreateClass;
     class destructor DestroyClass;
+
+    class procedure FindStepDefinitions(StepDefinitions: TList<IStepDefinitionsContainer>);
+
+    class procedure RunTest(const FeatureFileName: string;
+      StepDefinitions: TList<IStepDefinitionsContainer>); overload;
   public
-    class procedure RunTest(const FeatureFileName: string);
     class procedure RunTests(const Dir: string);
   end;
 
 implementation
 
 uses
-  System.Generics.Collections,
   System.IOUtils,
   System.SysUtils,
   Decumber.Gherkin.AstNode,
   Decumber.Gherkin.Lexer,
   Decumber.Gherkin.Parser,
   Decumber.Gherkin.Token,
-  Decumber.StepDefinitions.Container,
   Decumber.StepDefinitions.Finder,
   Decumber.TestRunner.Scenario;
 
@@ -51,17 +55,18 @@ begin
   FRttiContext.Free;
 end;
 
-class procedure TDecumber.RunTest(const FeatureFileName: string);
-
-  procedure FindStepDefinitions(StepDefinitions: TList<IStepDefinitionsContainer>);
-  begin
-    const Finder = TStepDefinitionsFinder.Create(FRttiContext);
-    try
-      Finder.FindAll(StepDefinitions);
-    finally
-      Finder.Free;
-    end;
+class procedure TDecumber.FindStepDefinitions(StepDefinitions: TList<IStepDefinitionsContainer>);
+begin
+  const Finder = TStepDefinitionsFinder.Create(FRttiContext);
+  try
+    Finder.FindAll(StepDefinitions);
+  finally
+    Finder.Free;
   end;
+end;
+
+class procedure TDecumber.RunTest(const FeatureFileName: string;
+  StepDefinitions: TList<IStepDefinitionsContainer>);
 
   function ParseFile(const FileName: string): TAstNode;
   begin
@@ -84,9 +89,7 @@ class procedure TDecumber.RunTest(const FeatureFileName: string);
 begin
   var Ast: TAstNode := nil;
   var TestRunner: TScenarioTestRunner := nil;
-  const StepDefinitions = TList<IStepDefinitionsContainer>.Create;
   try
-    FindStepDefinitions(StepDefinitions);
     TestRunner := TScenarioTestRunner.Create(StepDefinitions);
     Ast := ParseFile(FeatureFileName);
     Writeln(Ast.Token.Value);
@@ -103,7 +106,6 @@ begin
       Scenarios.Free;
     end;
   finally
-    StepDefinitions.Free;
     TestRunner.Free;
     Ast.Free;
   end;
@@ -111,8 +113,18 @@ end;
 
 class procedure TDecumber.RunTests(const Dir: string);
 begin
-  const FeatureFiles = TDirectory.GetFiles(Dir, '*.feature');
-
+  const StepDefinitions = TList<IStepDefinitionsContainer>.Create;
+  try
+    FindStepDefinitions(StepDefinitions);
+    const FeatureFiles = TDirectory.GetFiles(Dir, '*.feature');
+    for var FileName in FeatureFiles do
+    begin
+      RunTest(FileName, StepDefinitions);
+      Writeln;
+    end;
+  finally
+    StepDefinitions.Free;
+  end;
 end;
 
 end.

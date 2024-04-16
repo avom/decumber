@@ -148,6 +148,12 @@ procedure TStepDefinitionsContainer.InvokeStep(Instance: TObject; const Step: st
           else
             RaiseNotImplemented(ParamType.ToString);
         end;
+      tkInt64:
+        Result := StrToInt64(StrValue);
+      tkInteger:
+        Result := StrToInt(StrValue);
+      tkUString:
+        Result := StrValue
       else
         RaiseNotImplemented(ParamType.ToString);
     end;
