@@ -5,6 +5,7 @@ interface
 uses
   System.Rtti,
   System.Generics.Collections,
+  Decumber.Assertions.Assert,
   Decumber.StepDefinitions.Attributes,
   Decumber.StepDefinitions.Container;
 
@@ -16,6 +17,8 @@ type
   AndAttribute = Decumber.StepDefinitions.Attributes.AndAttribute;
   And_Attribute = AndAttribute;
   ButAttribute = Decumber.StepDefinitions.Attributes.ButAttribute;
+
+  Assert = Decumber.Assertions.Assert.Assert;
 
   TDecumber = class sealed
   private

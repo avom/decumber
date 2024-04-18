@@ -25,6 +25,7 @@ implementation
 
 uses
   System.SysUtils,
+  Decumber.Assertions.Exceptions,
   Decumber.Gherkin.Token;
 
 { TScenarioTestRunner }
@@ -86,7 +87,7 @@ begin
         Container.InvokeStep(Obj, GetStepWithoutKeyword(Step.Token.Value));
         Writeln('OK');
       except
-        on Ex: EAssertionFailed do
+        on Ex: EAssertError do
         begin
           Writeln('Fail');
           Writeln(Ex.Message);

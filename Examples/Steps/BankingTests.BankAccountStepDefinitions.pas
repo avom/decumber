@@ -93,8 +93,7 @@ end;
 procedure TBankAccountStepDefinitions.i_have_euros_left_in_my_bank_account(Balance: Currency);
 begin
   const ActualBalance = FAccount.GetBalance;
-  Assert(Balance = ActualBalance.Amount,
-    Format('Expected balance %.2f, but was %.2f', [Balance, ActualBalance.Amount]));
+  Assert.That(ActualBalance.Amount).IsEqualTo(Balance);
 end;
 
 end.

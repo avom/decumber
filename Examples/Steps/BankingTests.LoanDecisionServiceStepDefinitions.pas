@@ -95,7 +95,7 @@ begin
     THomeLoanInterestRateProvider.Create);
   try
     const Decision = Service.GetLoanDecision(FApplication);
-    Assert(Decision = ExpectedDecision);
+    Assert.That(Decision).IsEqualTo(ExpectedDecision);
   finally
     Service.Free;
   end;

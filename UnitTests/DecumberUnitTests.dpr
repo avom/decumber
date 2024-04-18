@@ -26,7 +26,9 @@ uses
   Decumber.StepDefinitions.Attributes in '..\Source\Decumber\Decumber.StepDefinitions.Attributes.pas',
   Decumber.StepDefinitions.Container in '..\Source\Decumber\Decumber.StepDefinitions.Container.pas',
   Decumber.StepDefinitions.Finder in '..\Source\Decumber\Decumber.StepDefinitions.Finder.pas',
-  Decumber.TestRunner.Scenario in '..\Source\Decumber\Decumber.TestRunner.Scenario.pas';
+  Decumber.TestRunner.Scenario in '..\Source\Decumber\Decumber.TestRunner.Scenario.pas',
+  Decumber.Assertions.Assert in '..\Source\Decumber\Decumber.Assertions.Assert.pas',
+  Decumber.Assertions.Exceptions in '..\Source\Decumber\Decumber.Assertions.Exceptions.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

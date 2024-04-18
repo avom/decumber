@@ -151,6 +151,8 @@
         <DCCReference Include="..\Source\Decumber\Decumber.StepDefinitions.Container.pas"/>
         <DCCReference Include="..\Source\Decumber\Decumber.StepDefinitions.Finder.pas"/>
         <DCCReference Include="..\Source\Decumber\Decumber.TestRunner.Scenario.pas"/>
+        <DCCReference Include="..\Source\Decumber\Decumber.Assertions.Assert.pas"/>
+        <DCCReference Include="..\Source\Decumber\Decumber.Assertions.Exceptions.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
