@@ -1,6 +1,6 @@
 # Decumber
 
-Decumber is a library for running automatic acceptance tests written in plain language ([Gherkin](https://cucumber.io/docs/gherkin/)).
+Decumber is a Delphi library for running automated acceptance tests written in plain language ([Gherkin](https://cucumber.io/docs/gherkin/)).
 
 ```Gherkin
 Feature: Bank account
